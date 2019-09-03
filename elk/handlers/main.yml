@@ -1,0 +1,38 @@
+---
+# handlers file for ELK
+- name: restart elk services
+  systemd:
+    name: "{{item}}"
+    state: restarted
+    enabled: yes
+  with_items:
+    - logstash
+    - elasticsearch
+    - kibana
+
+- name: elasticsearch
+  systemd:
+    state: started
+    daemon_reload: yes
+    enabled: yes
+    name: elasticsearch
+
+- name: logstash
+  systemd:
+    state: started
+    daemon_reload: yes
+    enabled: yes
+    name: logstash
+
+- name: kibana
+  systemd:
+    state: started
+    daemon_reload: yes
+    enabled: yes
+    name: kibana
+
+- name: httpd
+  systemd:
+    name: httpd
+    state: started
+    enabled: yes

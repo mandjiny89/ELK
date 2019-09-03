@@ -1,0 +1,31 @@
+---
+- name: Install filebeat on the client systems
+  yum: 
+    name: https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.3.1-x86_64.rpm
+    state: present
+    download_dir: /opt/
+
+- name: Install java-11 
+  yum: 
+    name: java-11-openjdk*
+    state: present
+
+- name: Start the filebeat services 
+  systemd: 
+    name: filebeat
+    state: started
+    enabled: yes
+
+- name: copy the filebeat module to client machine
+  copy: 
+    src: filebeat.yml
+    dest: /etc/filebeat/
+    force: yes
+  notify:
+    - restart filebeat
+
+- name: remove the filebeat package from remote server
+  file:
+    path: /opt/filebeat-7*
+    state: absent  
+    

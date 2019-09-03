@@ -1,0 +1,5 @@
+---
+# tasks file for elk
+#- include: downloads.yml
+- include: installation.yml
+- include: firewalld.yml

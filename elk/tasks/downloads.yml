@@ -1,0 +1,12 @@
+---
+# Downloading required software to build ELK server
+
+- name: download Elasticsearch, Logstash and Kibana
+  get_url:
+      url: "{{ item }}"
+      dest: /opt/
+      mode: '0755'
+  with_items:
+    - https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.3.1-x86_64.rpm
+    - https://artifacts.elastic.co/downloads/kibana/kibana-7.3.1-x86_64.rpm
+    - https://artifacts.elastic.co/downloads/logstash/logstash-7.3.1.rpm

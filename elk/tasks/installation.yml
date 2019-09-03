@@ -1,0 +1,53 @@
+---
+# Installing Logstash, elasticsearch and Kibana
+
+- name: Install httpd 
+  yum: 
+    name: httpd
+    state: latest
+  notify: httpd
+
+- name: Installing Logstash, elasticsearch and Kibana
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.3.1-x86_64.rpm
+    - https://artifacts.elastic.co/downloads/kibana/kibana-7.3.1-x86_64.rpm
+    - https://artifacts.elastic.co/downloads/logstash/logstash-7.3.1.rpm
+  notify:
+    - restart elk services
+
+- name: jdk installation 
+  yum: 
+    name: java-11-openjdk*
+    state: present
+
+#- name: Change java version 
+#  expect:
+#    command: sudo alternative -java
+#    responses:
+#      There is 3 program that provides java: "3"
+
+- name: Configure elasticsearch
+  copy:
+    src: elasticsearch.yml
+    dest: /etc/elasticsearch/elasticsearch.yml
+  notify: elasticsearch
+
+- name: Configure kibana
+  copy: 
+    src: kibana.yml
+    dest: /etc/kibana/kibana.yml
+  notify: kibana
+
+    
+- name: setup the logstash conf.d file
+  copy: 
+    src: central.conf
+    dest: /etc/logstash/conf.d/
+    owner: test
+    group: test
+  notify: logstash
+
+ 
